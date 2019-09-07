@@ -7,8 +7,8 @@ object Person {
   def apply(name: String): Person = {
     val names: Array[String] = name.split(" ")
     names match {
-      case names: Array[String] if names.size == 2 =>
-        new Person(names(0), names(1))
+      case Array(firstName,lastName) =>
+        new Person(firstName, lastName)
       case _ =>
         throw new Exception(
           s"names can only have 2 names, but $names has more than 2 names")
@@ -16,7 +16,6 @@ object Person {
 
   }
 }
-
 
 // * Pattern Matching
 case class Cat(color: String, food: String)
