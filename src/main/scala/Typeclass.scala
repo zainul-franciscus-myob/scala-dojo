@@ -1,22 +1,48 @@
 package typeclass
 
 sealed trait TrafficLight {
-  def next: TrafficLight = ???
+  def next: TrafficLight = this match {
+    case Red    => Green
+    case Green  => Yellow
+    case Yellow => Red
+  }
 }
-
-final case object Red extends TrafficLight
-final case object Green extends TrafficLight
-final case object Yellow extends TrafficLight
+final case object Red extends TrafficLight {
+  override def next: TrafficLight = Green
+}
+final case object Green extends TrafficLight {
+  override def next: TrafficLight = Yellow
+}
+final case object Yellow extends TrafficLight {
+  override def next: TrafficLight = Red
+}
 
 sealed trait LinkedList[A] {
   def apply(index: Int): A = ???
+//  this match {
+//    case Pair(head, tail) => {
+//      if (index == 0) head else tail(index - 1)
+//    }
+//    case End() => throw new Exception("Out of Boundary")
+//  }
 }
 
-final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-final case class End[A]() extends LinkedList[A]
+final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A] {
+  override def apply(index: Int): A = if (index == 0) head else tail(index - 1)
+}
+final case class End[A]() extends LinkedList[A] {
+  override def apply(index: Int): A = throw new Exception("Out of Boundary")
+}
 
-sealed trait CoLinkedList[A] {
+sealed trait CoLinkedList[+A] {
   def apply(index: Int): A = ???
+
+//    this match {
+//    case CoPair(head, tail) => {
+//      if (index == 0) head else tail(index - 1)
+//    }
+//    case CoEnd => throw new Exception("Out of Boundary")
+//  }
 }
 final case class CoPair[A](head: A, tail: CoLinkedList[A])
     extends CoLinkedList[A]

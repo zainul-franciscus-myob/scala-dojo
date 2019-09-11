@@ -15,8 +15,10 @@ Try implement `Person` and `ChipShop` in `ClassAndObject` and run `sbt testOnly 
 
   it should "take a full name and able to get first and last name seprately" in {
     val me = Person("Jichao Ouyang")
-    me.lastName shouldBe "Ouyang"
-    me.firstName shouldBe "Jichao"
+    me.isRight shouldBe true
+    me.isLeft shouldBe false
+    me.map(p => p.firstName shouldBe "Jichao")
+
   }
 
   behavior of "Chip Shop"
