@@ -27,8 +27,10 @@ final case class Leaf[A](value: A) extends Tree[A]
 
 object Tree {
   implicit val treeFunctor: Functor[Tree] = new Functor[Tree] {
-    def map[A, B](value: Tree[A])(f: A => B): Tree[B] = {
-
+    def map[A, B](value: Tree[A])(f: A => B): Tree[B] = value match {
+      case Branch(leftTree, rightTree) =>
+        Branch(map(leftTree)(f), map(rightTree)(f))
+      case Leaf(a) => Leaf(f(a))
     }
   }
 
@@ -42,7 +44,9 @@ trait Printable[A] { self =>
 
 object Printable {
   implicit val printableContravariant = new Contravariant[Printable] {
-    def contramap[A, B](fa: Printable[A])(func: B => A): Printable[B] = ???
+    def contramap[A, B](fa: Printable[A])(func: B => A): Printable[B] =  new Printable[B] {
+      def format(value: B): String = fa.format(func(value))
+    }
   }
 
   def format[A: Printable](value: A): String = {
@@ -59,8 +63,9 @@ object Printable {
       if (value) "yes" else "no"
   }
 
-  implicit def boxPrintable[A](implicit p: Printable[A]): Printable[Box[A]] =
-    ???
+  implicit def boxPrintable[A](implicit p: Printable[A]): Printable[Box[A]] = new Printable[Box[A]] {
+    override def format(value: Box[A]): String = p.format[Printable[Box[A]]](value)
+  }
 }
 
 final case class Box[A](value: A)

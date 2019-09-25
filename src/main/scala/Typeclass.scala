@@ -26,11 +26,11 @@ sealed trait LinkedList[A] {
 final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
 final case class End[A]() extends LinkedList[A]
 
-sealed trait CoLinkedList[A] {
+sealed trait CoLinkedList[+A] {
   def apply(index: Int): A = ???
 }
 final case class CoPair[A](head: A, tail: CoLinkedList[A])
-  extends CoLinkedList[A]
+    extends CoLinkedList[A]
 final case object CoEnd extends CoLinkedList[Nothing]
 
 trait JsonWriter[A] {
@@ -65,6 +65,8 @@ object Person {
     }
   }
 }
+
+//test
 
 final case class Cat(name: String, food: String)
 
