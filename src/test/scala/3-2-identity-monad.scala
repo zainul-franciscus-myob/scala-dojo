@@ -17,5 +17,4 @@ class `3.2.IdentityMonad` extends AsyncFlatSpec with Matchers {
   it should "able to use Id monad to lower the type level and verify the calculation logic much more easier" in {
     IdMonad.sumSquare(Monad[Id].pure(3), Monad[Id].pure(4)) shouldBe 25
   }
-
 }
